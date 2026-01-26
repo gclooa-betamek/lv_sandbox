@@ -1,0 +1,75 @@
+{
+	// https://code.visualstudio.com/docs/editor/workspaces
+	// https://code.visualstudio.com/docs/editor/multi-root-workspaces
+	// https://code.visualstudio.com/docs/editor/variables-reference
+
+	"folders": [
+		{
+			"path": "."
+		},
+	],
+	// extensions.json section
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",              // common C/C++ support
+			"ms-vscode.cpptools-themes",       // general C/C++ theme
+			"ms-vscode.cmake-tools"            // cmake support
+		],
+		"unwantedRecommendations": [
+		]
+	},
+	// settings.json section
+	"settings": {
+		"files.trimTrailingWhitespace": true,
+		"files.insertFinalNewline": true,
+		"files.trimFinalNewlines": true,
+		"cmake.generator": "Visual Studio 17 2022",
+		"cmake.configureOnOpen": true,
+		"cmake.configureArgs": [
+			"-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake",
+			"-DVCPKG_TARGET_TRIPLET=x64-windows"
+		],
+		"cmake.buildDirectory": "${workspaceFolder}/build",
+		"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+		"files.associations": {
+			"glob.h": "c",
+			"lvgl.h": "c"
+		},
+	},
+	// tasks.json section
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+			"label": "Build Debug",
+			"type": "shell",
+			"command": "cmake --build ${workspaceFolder}/build --config Debug",
+			"group": "build",
+			"problemMatcher": ["$msCompile"]
+			},
+			{
+			"label": "Clean Build",
+			"type": "shell",
+			"command": "cmake --build ${workspaceFolder}/build --target clean --config Debug",
+			"group": "build"
+			}
+		]
+	},
+	// launch.json section
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Debug LVGL (MSVC)",
+				"type": "cppvsdbg",
+				"request": "launch",
+				"program": "${workspaceFolder}/bin/Debug/main.exe",
+				"args": [],
+				"preLaunchTask": "Build Debug",
+				"stopAtEntry": false,
+				"cwd": "${workspaceFolder}",
+				"environment": []
+			}
+		],
+	},
+}
